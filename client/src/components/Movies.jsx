@@ -20,7 +20,7 @@ class Movies extends React.Component {
         {this.props.movies.map( movie => 
           <li key={movie.id}>
             <img src={`https://image.tmdb.org/t/p/w154/${movie.poster_path}`}></img>
-            <h2>{movie.title}</h2>
+            <h2 onClick={() => this.props.saveMovie(movie)}>{movie.title}</h2>
             <section className="movie_details">
               <div className="movie_year">
                 <span className="title">Year</span>

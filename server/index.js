@@ -32,7 +32,7 @@ app.get('/genres', function(req, res) {
 
 app.post('/save', function(req, res) {
   let q = `insert into favorites (movie_id, movie_name, vote_count, vote_average) values(?, ?, ?, ?)`;
-  let params = [req.body.id, req.body.movieName, req.body.voteCount, req.body.voteAverage];
+  let params = [req.body.id, req.body.title, req.body.vote_count, req.body.vote_average];
 
   db.connection.query(q, params, (err) => {
     if (err) console.log('error on save to db: ', err);
