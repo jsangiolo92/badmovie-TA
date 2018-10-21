@@ -32,6 +32,11 @@ app.get('/genres', function(req, res) {
   // use this endpoint, which will also require your API key: https://api.themoviedb.org/3/genre/movie/list
 
   // send back
+  console.log('inside app.get genres');
+  apiHelpers.getGenres((err, data) => {
+    if (err) console.log('error on get to genres: ', err);
+    else res.send(data);
+  })
 });
 
 app.post('/save', function(req, res) {
