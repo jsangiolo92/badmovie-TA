@@ -5,6 +5,7 @@ var app = express();
 
 //Helpers
 var apiHelpers = require('./helpers/apiHelpers.js');
+var db = require('../db/sql/index');
 
 //Middleware
 app.use(bodyParser.json());
@@ -16,7 +17,7 @@ app.use(express.static(__dirname + '/../client/dist'));
 //OPTION 1: Use regular routes
 app.get('/search', function(req, res) {
 
-  apiHelpers.getMovies('18', (err, data) => {
+  apiHelpers.getMovies(req.params.genre, (err, data) => {
     if (err) console.log ('error on get search: ', err);
     else res.send(data);
   })
