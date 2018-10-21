@@ -20,4 +20,14 @@ const getGenres = (callback) => {
   })
 }
 
+const getMovies = (genre, callback) => {
+  let url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=vote_average.asc&include_adult=false&include_video=false&page=1&primary_release_date.lte=2018&with_genres=${genre}`;
+  
+  axios.get(url)
+  .then(({data}) => {
+    callback(null, data);
+  })
+}
+
 module.exports.getGenres = getGenres;
+module.exports.getMovies = getMovies;
