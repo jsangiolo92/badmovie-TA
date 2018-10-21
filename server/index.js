@@ -31,8 +31,8 @@ app.get('/genres', function(req, res) {
 });
 
 app.post('/save', function(req, res) {
-  let q = `insert into favorites (movie_id, movie_name, vote_count, vote_average) values(?, ?, ?, ?)`;
-  let params = [req.body.id, req.body.title, req.body.vote_count, req.body.vote_average];
+  let q = `insert into favorites (id, title, release_date, vote_average, poster_path) values(?, ?, ?, ?, ?)`;
+  let params = [req.body.id, req.body.title, req.body.release_date, req.body.vote_average, req.body.poster_path];
 
   db.connection.query(q, params, (err) => {
     if (err) console.log('error on save to db: ', err);
@@ -41,10 +41,18 @@ app.post('/save', function(req, res) {
 });
 
 app.post('/delete', function(req, res) {
-  let q = `delete from favorites where movie_id = ${req.body.id}`;
+  let q = `delete from favorites where id = ${req.body.id}`;
   db.connection.query(q, (err) => {
     if (err) console.log('error on delete from db: ', err);
     else res.sendStatus(201);
+  })
+});
+
+app.get('/query', (req, res) => {
+  let q = `select * from favorites`;
+  db.connection.query(q, (err, results) => {
+    if (err) console.log('error on db query: ', err);
+    else res.send(results);
   })
 });
 
