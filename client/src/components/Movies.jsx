@@ -12,15 +12,20 @@ class Movies extends React.Component {
   // If you're currently showing the fave list, delete the movie instead
   // You can tell which list is currently being rendered based on whether the prop "showFaves" is false (search results) or true (fave list) (within index.jsx)
 
-  render() {
+  renderImage(movie) {
+    if (movie.poster_path) return `https://image.tmdb.org/t/p/w154/${movie.poster_path}`
+    else return 'https://cdn.browshot.com/static/images/not-found.png'
+  }
 
+  render() {
     return (
       <ul className="movies">
         {/* Make this list dynamic! */}
         {this.props.movies.map( movie => 
-          <li key={movie.id}>
-            <img src={`https://image.tmdb.org/t/p/w154/${movie.poster_path}`}></img>
-            <h2 onClick={() => this.props.saveMovie(movie)}>{movie.title}</h2>
+          <li className="movie_item" onClick={() => this.props.clickMovie(movie)}>
+          <img src={this.renderImage(movie)}></img>
+          <div className="movie_description">
+            <h2>{movie.title}</h2>
             <section className="movie_details">
               <div className="movie_year">
                 <span className="title">Year</span>
@@ -31,7 +36,8 @@ class Movies extends React.Component {
                 <span>{movie.vote_average}</span>
               </div>
             </section>
-          </li>  
+          </div>
+        </li>
         )}
       </ul>
     );
