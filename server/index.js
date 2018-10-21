@@ -31,11 +31,21 @@ app.get('/genres', function(req, res) {
 });
 
 app.post('/save', function(req, res) {
+  let q = `insert into favorites (movie_id, movie_name, vote_count, vote_average) values(?, ?, ?, ?)`;
+  let params = [req.body.id, req.body.movieName, req.body.voteCount, req.body.voteAverage];
 
+  db.connection.query(q, params, (err) => {
+    if (err) console.log('error on save to db: ', err);
+    else res.sendStatus(201);
+  })
 });
 
 app.post('/delete', function(req, res) {
-
+  let q = `delete from favorites where movie_id = ${req.body.id}`;
+  db.connection.query(q, (err) => {
+    if (err) console.log('error on delete from db: ', err);
+    else res.sendStatus(201);
+  })
 });
 
 //OPTION 2: Use Express Router
