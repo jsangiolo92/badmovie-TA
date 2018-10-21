@@ -53,6 +53,7 @@ class App extends React.Component {
     this.setState({
       showFaves: !this.state.showFaves
     });
+    this.getFavorites()
   }
 
   getFavorites(){
