@@ -16,6 +16,10 @@ class Search extends React.Component {
     })
   }
 
+  getGenre() {
+    return document.getElementById('list').value
+  }
+
   componentDidMount() {
     this.getGenres();
   }
@@ -25,14 +29,17 @@ class Search extends React.Component {
       <div className="search">
         <button onClick={() => {this.props.swapFavorites()}}>{this.props.showFaves ? "Show Results" : "Show Favorites"}</button>
         <br/><br/>
-        <select>
+        <select id="list">
           {this.state.genres.map( genre =>
             <option key={genre.id} value={genre.id}>{genre.name}</option>  
           )}
         </select>
         <br/><br/>
 
-        <button>Search</button>
+        <button onClick={() => {
+          let genre = this.getGenre();
+          this.props.getMovies(genre)
+        }}>Search</button>
 
       </div>
     );
