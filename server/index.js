@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request')
 var app = express();
+var db = require('../db/mongodb/index');
 
 //Helpers
 var apiHelpers = require('./helpers/apiHelpers.js');
@@ -15,45 +16,36 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 //OPTION 1: Use regular routes
 app.get('/search', function(req, res) {
-  // get the search genre     
-
-  // https://www.themoviedb.org/account/signup
-
-  // use this endpoint to search for movies by genres, you will need an API key
-
-  // https://api.themoviedb.org/3/discover/movie
-
-  // and sort them by horrible votes using the search parameters in the API
+  apiHelpers.getMovies(req.query.genre, req.query.year, (err, data) => {
+    if (err) console.log('error on get to search: ', err);
+    else res.send(data);
+  })
 });
 
 app.get('/genres', function(req, res) {
-  // make an axios request to get the list of official genres
-  
-  // use this endpoint, which will also require your API key: https://api.themoviedb.org/3/genre/movie/list
-
-  // send back
-  console.log('inside app.get genres');
-  apiHelpers.getGenres((err, data) => {
-    if (err) console.log('error on get to genres: ', err);
+  apiHelpers.getGenres( (err, data) => {
+    if (err) console.log('error on get genres: ', err);
     else res.send(data);
   })
 });
 
 app.post('/save', function(req, res) {
-
+  db.save(req.body)
+  .then( () => {res.sendStatus(201)})
+  .catch( () => {res.sendStatus(500)})
 });
 
 app.post('/delete', function(req, res) {
-
+  db.remove(req.body)
+  .then( () => res.sendStatus(201))
+  .catch( () => res.sendStatus(500))
 });
 
-//OPTION 2: Use Express Router
-//IF you decide to go with this option delete OPTION 1 to continue
-//Routes
-const movieRoutes = require('./routes/movieRoutes.js');
-//Use routes
-app.use('/movies', movieRoutes);
-
+app.get('/favorites', (req, res) => {
+  db.getFavorites()
+  .then( (results) => {res.send(results)})
+  .catch( (err) => console.log('erronr on call to getFavorites: ', err))
+})
 
 app.listen(3000, function() {
   console.log('listening on port 3000!');
